@@ -37,11 +37,12 @@ model Tier {
 }
 
 model Level {
-  id     String   @id @default(cuid())
-  name   String   @default("")
-  tier   Tier?    @relation("Level_tier", fields: [tierId], references: [id])
-  tierId String?  @map("tier")
-  reward Reward[] @relation("Reward_level")
+  id       String  @id @default(cuid())
+  name     String  @default("")
+  tier     Tier?   @relation("Level_tier", fields: [tierId], references: [id])
+  tierId   String? @map("tier")
+  reward   Reward? @relation("Level_reward", fields: [rewardId], references: [id])
+  rewardId String? @unique @map("reward")
 
   @@index([tierId])
 }
@@ -52,14 +53,12 @@ model Reward {
   description  String      @default("")
   type         String?
   rarity       String?
-  level        Level?      @relation("Reward_level", fields: [levelId], references: [id])
-  levelId      String?     @map("level")
+  level        Level?      @relation("Level_reward")
   tier         Tier?       @relation("Reward_tier", fields: [tierId], references: [id])
   tierId       String?     @map("tier")
   battlepass   BattlePass? @relation("Reward_battlepass", fields: [battlepassId], references: [id])
   battlepassId String?     @map("battlepass")
 
-  @@index([levelId])
   @@index([tierId])
   @@index([battlepassId])
 }

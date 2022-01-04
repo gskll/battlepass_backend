@@ -350,13 +350,7 @@ type Level {
   id: ID!
   name: String
   tier: Tier
-  reward(
-    where: RewardWhereInput! = {}
-    orderBy: [RewardOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Reward!]
-  rewardCount(where: RewardWhereInput! = {}): Int
+  reward: Reward
 }
 
 input LevelWhereUniqueInput {
@@ -370,7 +364,7 @@ input LevelWhereInput {
   id: IDFilter
   name: StringFilter
   tier: TierWhereInput
-  reward: RewardManyRelationFilter
+  reward: RewardWhereInput
 }
 
 input LevelOrderByInput {
@@ -381,12 +375,18 @@ input LevelOrderByInput {
 input LevelUpdateInput {
   name: String
   tier: TierRelateToOneForUpdateInput
-  reward: RewardRelateToManyForUpdateInput
+  reward: RewardRelateToOneForUpdateInput
 }
 
 input TierRelateToOneForUpdateInput {
   create: TierCreateInput
   connect: TierWhereUniqueInput
+  disconnect: Boolean
+}
+
+input RewardRelateToOneForUpdateInput {
+  create: RewardCreateInput
+  connect: RewardWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -398,12 +398,17 @@ input LevelUpdateArgs {
 input LevelCreateInput {
   name: String
   tier: TierRelateToOneForCreateInput
-  reward: RewardRelateToManyForCreateInput
+  reward: RewardRelateToOneForCreateInput
 }
 
 input TierRelateToOneForCreateInput {
   create: TierCreateInput
   connect: TierWhereUniqueInput
+}
+
+input RewardRelateToOneForCreateInput {
+  create: RewardCreateInput
+  connect: RewardWhereUniqueInput
 }
 
 type Reward {
