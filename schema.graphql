@@ -252,6 +252,56 @@ input BattlePassRelateToOneForCreateInput {
   connect: BattlePassWhereUniqueInput
 }
 
+type Level {
+  id: ID!
+  name: String
+  tier: Tier
+}
+
+input LevelWhereUniqueInput {
+  id: ID
+}
+
+input LevelWhereInput {
+  AND: [LevelWhereInput!]
+  OR: [LevelWhereInput!]
+  NOT: [LevelWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  tier: TierWhereInput
+}
+
+input LevelOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input LevelUpdateInput {
+  name: String
+  tier: TierRelateToOneForUpdateInput
+}
+
+input TierRelateToOneForUpdateInput {
+  create: TierCreateInput
+  connect: TierWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LevelUpdateArgs {
+  where: LevelWhereUniqueInput!
+  data: LevelUpdateInput!
+}
+
+input LevelCreateInput {
+  name: String
+  tier: TierRelateToOneForCreateInput
+}
+
+input TierRelateToOneForCreateInput {
+  create: TierCreateInput
+  connect: TierWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -276,6 +326,12 @@ type Mutation {
   updateTiers(data: [TierUpdateArgs!]!): [Tier]
   deleteTier(where: TierWhereUniqueInput!): Tier
   deleteTiers(where: [TierWhereUniqueInput!]!): [Tier]
+  createLevel(data: LevelCreateInput!): Level
+  createLevels(data: [LevelCreateInput!]!): [Level]
+  updateLevel(where: LevelWhereUniqueInput!, data: LevelUpdateInput!): Level
+  updateLevels(data: [LevelUpdateArgs!]!): [Level]
+  deleteLevel(where: LevelWhereUniqueInput!): Level
+  deleteLevels(where: [LevelWhereUniqueInput!]!): [Level]
 }
 
 type Query {
@@ -295,6 +351,14 @@ type Query {
   ): [Tier!]
   tier(where: TierWhereUniqueInput!): Tier
   tiersCount(where: TierWhereInput! = {}): Int
+  levels(
+    where: LevelWhereInput! = {}
+    orderBy: [LevelOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Level!]
+  level(where: LevelWhereUniqueInput!): Level
+  levelsCount(where: LevelWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

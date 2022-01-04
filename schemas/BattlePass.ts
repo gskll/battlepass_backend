@@ -7,7 +7,6 @@ import {
   text,
   timestamp,
 } from '@keystone-6/core/fields'
-import { Tier } from './Tier'
 
 export const BattlePass: Lists.BattlePass = list({
   fields: {

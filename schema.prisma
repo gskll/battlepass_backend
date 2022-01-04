@@ -23,11 +23,21 @@ model BattlePass {
 }
 
 model Tier {
-  id           String      @id @default(cuid())
-  name         String      @default("")
-  price        Int?
-  battlepass   BattlePass? @relation("Tier_battlepass", fields: [battlepassId], references: [id])
-  battlepassId String?     @map("battlepass")
+  id              String      @id @default(cuid())
+  name            String      @default("")
+  price           Int?
+  battlepass      BattlePass? @relation("Tier_battlepass", fields: [battlepassId], references: [id])
+  battlepassId    String?     @map("battlepass")
+  from_Level_tier Level[]     @relation("Level_tier")
 
   @@index([battlepassId])
+}
+
+model Level {
+  id     String  @id @default(cuid())
+  name   String  @default("")
+  tier   Tier?   @relation("Level_tier", fields: [tierId], references: [id])
+  tierId String? @map("tier")
+
+  @@index([tierId])
 }

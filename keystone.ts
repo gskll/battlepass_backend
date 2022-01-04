@@ -1,5 +1,6 @@
 import { config } from '@keystone-6/core'
 import { BattlePass } from './schemas/BattlePass'
+import { Level } from './schemas/Level'
 import { Tier } from './schemas/Tier'
 
 export default config({
@@ -11,5 +12,6 @@ export default config({
   lists: {
     BattlePass,
     Tier,
+    Level,
   },
 })
