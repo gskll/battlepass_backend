@@ -35,5 +35,7 @@ export const Reward: Lists.Reward = list({
       },
     }),
     level: relationship({ ref: 'Level.reward', many: false }),
+    tier: relationship({ ref: 'Tier.rewards', many: false }),
+    battlepass: relationship({ ref: 'BattlePass.rewards', many: false }),
   },
 })

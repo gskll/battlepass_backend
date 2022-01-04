@@ -23,6 +23,13 @@ type BattlePass {
     skip: Int! = 0
   ): [Mission!]
   missionsCount(where: MissionWhereInput! = {}): Int
+  rewards(
+    where: RewardWhereInput! = {}
+    orderBy: [RewardOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Reward!]
+  rewardsCount(where: RewardWhereInput! = {}): Int
 }
 
 scalar DateTime
@@ -45,6 +52,7 @@ input BattlePassWhereInput {
   experience: IntFilter
   tiers: TierManyRelationFilter
   missions: MissionManyRelationFilter
+  rewards: RewardManyRelationFilter
 }
 
 input IDFilter {
@@ -148,6 +156,12 @@ input MissionManyRelationFilter {
   none: MissionWhereInput
 }
 
+input RewardManyRelationFilter {
+  every: RewardWhereInput
+  some: RewardWhereInput
+  none: RewardWhereInput
+}
+
 input BattlePassOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -172,6 +186,7 @@ input BattlePassUpdateInput {
   experience: Int
   tiers: TierRelateToManyForUpdateInput
   missions: MissionRelateToManyForUpdateInput
+  rewards: RewardRelateToManyForUpdateInput
 }
 
 input TierRelateToManyForUpdateInput {
@@ -188,6 +203,13 @@ input MissionRelateToManyForUpdateInput {
   connect: [MissionWhereUniqueInput!]
 }
 
+input RewardRelateToManyForUpdateInput {
+  disconnect: [RewardWhereUniqueInput!]
+  set: [RewardWhereUniqueInput!]
+  create: [RewardCreateInput!]
+  connect: [RewardWhereUniqueInput!]
+}
+
 input BattlePassUpdateArgs {
   where: BattlePassWhereUniqueInput!
   data: BattlePassUpdateInput!
@@ -202,6 +224,7 @@ input BattlePassCreateInput {
   experience: Int
   tiers: TierRelateToManyForCreateInput
   missions: MissionRelateToManyForCreateInput
+  rewards: RewardRelateToManyForCreateInput
 }
 
 input TierRelateToManyForCreateInput {
@@ -212,6 +235,11 @@ input TierRelateToManyForCreateInput {
 input MissionRelateToManyForCreateInput {
   create: [MissionCreateInput!]
   connect: [MissionWhereUniqueInput!]
+}
+
+input RewardRelateToManyForCreateInput {
+  create: [RewardCreateInput!]
+  connect: [RewardWhereUniqueInput!]
 }
 
 type Tier {
@@ -226,6 +254,13 @@ type Tier {
     skip: Int! = 0
   ): [Level!]
   levelsCount(where: LevelWhereInput! = {}): Int
+  rewards(
+    where: RewardWhereInput! = {}
+    orderBy: [RewardOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Reward!]
+  rewardsCount(where: RewardWhereInput! = {}): Int
 }
 
 input TierWhereUniqueInput {
@@ -241,6 +276,7 @@ input TierWhereInput {
   price: IntNullableFilter
   battlepass: BattlePassWhereInput
   levels: LevelManyRelationFilter
+  rewards: RewardManyRelationFilter
 }
 
 input IntNullableFilter {
@@ -271,6 +307,7 @@ input TierUpdateInput {
   price: Int
   battlepass: BattlePassRelateToOneForUpdateInput
   levels: LevelRelateToManyForUpdateInput
+  rewards: RewardRelateToManyForUpdateInput
 }
 
 input BattlePassRelateToOneForUpdateInput {
@@ -296,6 +333,7 @@ input TierCreateInput {
   price: Int
   battlepass: BattlePassRelateToOneForCreateInput
   levels: LevelRelateToManyForCreateInput
+  rewards: RewardRelateToManyForCreateInput
 }
 
 input BattlePassRelateToOneForCreateInput {
@@ -335,12 +373,6 @@ input LevelWhereInput {
   reward: RewardManyRelationFilter
 }
 
-input RewardManyRelationFilter {
-  every: RewardWhereInput
-  some: RewardWhereInput
-  none: RewardWhereInput
-}
-
 input LevelOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -356,13 +388,6 @@ input TierRelateToOneForUpdateInput {
   create: TierCreateInput
   connect: TierWhereUniqueInput
   disconnect: Boolean
-}
-
-input RewardRelateToManyForUpdateInput {
-  disconnect: [RewardWhereUniqueInput!]
-  set: [RewardWhereUniqueInput!]
-  create: [RewardCreateInput!]
-  connect: [RewardWhereUniqueInput!]
 }
 
 input LevelUpdateArgs {
@@ -381,11 +406,6 @@ input TierRelateToOneForCreateInput {
   connect: TierWhereUniqueInput
 }
 
-input RewardRelateToManyForCreateInput {
-  create: [RewardCreateInput!]
-  connect: [RewardWhereUniqueInput!]
-}
-
 type Reward {
   id: ID!
   name: String
@@ -393,6 +413,8 @@ type Reward {
   type: String
   rarity: String
   level: Level
+  tier: Tier
+  battlepass: BattlePass
 }
 
 input RewardWhereUniqueInput {
@@ -409,6 +431,8 @@ input RewardWhereInput {
   type: StringNullableFilter
   rarity: StringNullableFilter
   level: LevelWhereInput
+  tier: TierWhereInput
+  battlepass: BattlePassWhereInput
 }
 
 input RewardOrderByInput {
@@ -425,6 +449,8 @@ input RewardUpdateInput {
   type: String
   rarity: String
   level: LevelRelateToOneForUpdateInput
+  tier: TierRelateToOneForUpdateInput
+  battlepass: BattlePassRelateToOneForUpdateInput
 }
 
 input LevelRelateToOneForUpdateInput {
@@ -444,6 +470,8 @@ input RewardCreateInput {
   type: String
   rarity: String
   level: LevelRelateToOneForCreateInput
+  tier: TierRelateToOneForCreateInput
+  battlepass: BattlePassRelateToOneForCreateInput
 }
 
 input LevelRelateToOneForCreateInput {

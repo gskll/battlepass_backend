@@ -21,6 +21,7 @@ model BattlePass {
   experience  Int
   tiers       Tier[]    @relation("Tier_battlepass")
   missions    Mission[] @relation("Mission_battlepass")
+  rewards     Reward[]  @relation("Reward_battlepass")
 }
 
 model Tier {
@@ -30,6 +31,7 @@ model Tier {
   battlepass   BattlePass? @relation("Tier_battlepass", fields: [battlepassId], references: [id])
   battlepassId String?     @map("battlepass")
   levels       Level[]     @relation("Level_tier")
+  rewards      Reward[]    @relation("Reward_tier")
 
   @@index([battlepassId])
 }
@@ -45,15 +47,21 @@ model Level {
 }
 
 model Reward {
-  id          String  @id @default(cuid())
-  name        String  @default("")
-  description String  @default("")
-  type        String?
-  rarity      String?
-  level       Level?  @relation("Reward_level", fields: [levelId], references: [id])
-  levelId     String? @map("level")
+  id           String      @id @default(cuid())
+  name         String      @default("")
+  description  String      @default("")
+  type         String?
+  rarity       String?
+  level        Level?      @relation("Reward_level", fields: [levelId], references: [id])
+  levelId      String?     @map("level")
+  tier         Tier?       @relation("Reward_tier", fields: [tierId], references: [id])
+  tierId       String?     @map("tier")
+  battlepass   BattlePass? @relation("Reward_battlepass", fields: [battlepassId], references: [id])
+  battlepassId String?     @map("battlepass")
 
   @@index([levelId])
+  @@index([tierId])
+  @@index([battlepassId])
 }
 
 model Mission {

@@ -8,5 +8,6 @@ export const Tier: Lists.Tier = list({
     price: integer(),
     battlepass: relationship({ ref: 'BattlePass.tiers', many: false }),
     levels: relationship({ ref: 'Level.tier', many: true }),
+    rewards: relationship({ ref: 'Reward.tier', many: true }),
   },
 })

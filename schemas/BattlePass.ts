@@ -40,5 +40,6 @@ export const BattlePass: Lists.BattlePass = list({
     }),
     tiers: relationship({ ref: 'Tier.battlepass', many: true }),
     missions: relationship({ ref: 'Mission.battlepass', many: true }),
+    rewards: relationship({ ref: 'Reward.battlepass', many: true }),
   },
 })
