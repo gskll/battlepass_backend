@@ -12,14 +12,15 @@ generator client {
 }
 
 model BattlePass {
-  id          String   @id @default(cuid())
-  name        String   @default("")
-  description String   @default("")
-  status      String?  @default("DRAFT")
+  id          String    @id @default(cuid())
+  name        String    @default("")
+  description String    @default("")
+  status      String?   @default("DRAFT")
   start_date  DateTime
   end_date    DateTime
   experience  Int
-  tiers       Tier[]   @relation("Tier_battlepass")
+  tiers       Tier[]    @relation("Tier_battlepass")
+  missions    Mission[] @relation("Mission_battlepass")
 }
 
 model Tier {
@@ -53,4 +54,16 @@ model Reward {
   levelId     String? @map("level")
 
   @@index([levelId])
+}
+
+model Mission {
+  id           String      @id @default(cuid())
+  name         String      @default("")
+  description  String      @default("")
+  type         String?
+  goal_type    String?
+  battlepass   BattlePass? @relation("Mission_battlepass", fields: [battlepassId], references: [id])
+  battlepassId String?     @map("battlepass")
+
+  @@index([battlepassId])
 }

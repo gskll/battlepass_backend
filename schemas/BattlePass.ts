@@ -39,5 +39,6 @@ export const BattlePass: Lists.BattlePass = list({
       label: 'Experience points between levels',
     }),
     tiers: relationship({ ref: 'Tier.battlepass', many: true }),
+    missions: relationship({ ref: 'Mission.battlepass', many: true }),
   },
 })
