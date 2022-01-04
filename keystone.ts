@@ -18,4 +18,8 @@ export default config({
     Reward,
     Mission,
   },
+  server: {
+    cors: { origin: ['http://localhost:7777'], credentials: true },
+    port: 3000,
+  },
 })
