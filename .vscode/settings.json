@@ -6,4 +6,7 @@
     "titleBar.activeBackground": "#ae00ff",
     "titleBar.inactiveBackground": "#ae00ff"
   },
+  "cSpell.ignoreWords": [
+    "battlepass"
+  ],
 }

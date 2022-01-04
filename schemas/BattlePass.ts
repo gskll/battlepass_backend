@@ -1,4 +1,5 @@
 import { list } from '@keystone-6/core'
+import { Lists } from '.keystone/types'
 import {
   integer,
   relationship,
@@ -6,8 +7,9 @@ import {
   text,
   timestamp,
 } from '@keystone-6/core/fields'
+import { Tier } from './Tier'
 
-export const BattlePass = list({
+export const BattlePass: Lists.BattlePass = list({
   fields: {
     name: text({ validation: { isRequired: true } }),
     description: text({
@@ -37,5 +39,6 @@ export const BattlePass = list({
       validation: { isRequired: true },
       label: 'Experience points between levels',
     }),
+    tiers: relationship({ ref: 'Tier.battlepass', many: true }),
   },
 })

@@ -9,6 +9,13 @@ type BattlePass {
   start_date: DateTime
   end_date: DateTime
   experience: Int
+  tiers(
+    where: TierWhereInput! = {}
+    orderBy: [TierOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Tier!]
+  tiersCount(where: TierWhereInput! = {}): Int
 }
 
 scalar DateTime
@@ -29,6 +36,7 @@ input BattlePassWhereInput {
   start_date: DateTimeFilter
   end_date: DateTimeFilter
   experience: IntFilter
+  tiers: TierManyRelationFilter
 }
 
 input IDFilter {
@@ -120,6 +128,12 @@ input IntFilter {
   not: IntFilter
 }
 
+input TierManyRelationFilter {
+  every: TierWhereInput
+  some: TierWhereInput
+  none: TierWhereInput
+}
+
 input BattlePassOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -142,6 +156,14 @@ input BattlePassUpdateInput {
   start_date: DateTime
   end_date: DateTime
   experience: Int
+  tiers: TierRelateToManyForUpdateInput
+}
+
+input TierRelateToManyForUpdateInput {
+  disconnect: [TierWhereUniqueInput!]
+  set: [TierWhereUniqueInput!]
+  create: [TierCreateInput!]
+  connect: [TierWhereUniqueInput!]
 }
 
 input BattlePassUpdateArgs {
@@ -156,6 +178,78 @@ input BattlePassCreateInput {
   start_date: DateTime
   end_date: DateTime
   experience: Int
+  tiers: TierRelateToManyForCreateInput
+}
+
+input TierRelateToManyForCreateInput {
+  create: [TierCreateInput!]
+  connect: [TierWhereUniqueInput!]
+}
+
+type Tier {
+  id: ID!
+  name: String
+  price: Int
+  battlepass: BattlePass
+}
+
+input TierWhereUniqueInput {
+  id: ID
+}
+
+input TierWhereInput {
+  AND: [TierWhereInput!]
+  OR: [TierWhereInput!]
+  NOT: [TierWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  price: IntNullableFilter
+  battlepass: BattlePassWhereInput
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
+input TierOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  price: OrderDirection
+}
+
+input TierUpdateInput {
+  name: String
+  price: Int
+  battlepass: BattlePassRelateToOneForUpdateInput
+}
+
+input BattlePassRelateToOneForUpdateInput {
+  create: BattlePassCreateInput
+  connect: BattlePassWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TierUpdateArgs {
+  where: TierWhereUniqueInput!
+  data: TierUpdateInput!
+}
+
+input TierCreateInput {
+  name: String
+  price: Int
+  battlepass: BattlePassRelateToOneForCreateInput
+}
+
+input BattlePassRelateToOneForCreateInput {
+  create: BattlePassCreateInput
+  connect: BattlePassWhereUniqueInput
 }
 
 """
@@ -176,6 +270,12 @@ type Mutation {
   updateBattlePasses(data: [BattlePassUpdateArgs!]!): [BattlePass]
   deleteBattlePass(where: BattlePassWhereUniqueInput!): BattlePass
   deleteBattlePasses(where: [BattlePassWhereUniqueInput!]!): [BattlePass]
+  createTier(data: TierCreateInput!): Tier
+  createTiers(data: [TierCreateInput!]!): [Tier]
+  updateTier(where: TierWhereUniqueInput!, data: TierUpdateInput!): Tier
+  updateTiers(data: [TierUpdateArgs!]!): [Tier]
+  deleteTier(where: TierWhereUniqueInput!): Tier
+  deleteTiers(where: [TierWhereUniqueInput!]!): [Tier]
 }
 
 type Query {
@@ -187,6 +287,14 @@ type Query {
   ): [BattlePass!]
   battlePass(where: BattlePassWhereUniqueInput!): BattlePass
   battlePassesCount(where: BattlePassWhereInput! = {}): Int
+  tiers(
+    where: TierWhereInput! = {}
+    orderBy: [TierOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Tier!]
+  tier(where: TierWhereUniqueInput!): Tier
+  tiersCount(where: TierWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

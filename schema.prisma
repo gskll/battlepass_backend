@@ -19,4 +19,15 @@ model BattlePass {
   start_date  DateTime
   end_date    DateTime
   experience  Int
+  tiers       Tier[]   @relation("Tier_battlepass")
+}
+
+model Tier {
+  id           String      @id @default(cuid())
+  name         String      @default("")
+  price        Int?
+  battlepass   BattlePass? @relation("Tier_battlepass", fields: [battlepassId], references: [id])
+  battlepassId String?     @map("battlepass")
+
+  @@index([battlepassId])
 }
