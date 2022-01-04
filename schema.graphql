@@ -191,6 +191,13 @@ type Tier {
   name: String
   price: Int
   battlepass: BattlePass
+  levels(
+    where: LevelWhereInput! = {}
+    orderBy: [LevelOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Level!]
+  levelsCount(where: LevelWhereInput! = {}): Int
 }
 
 input TierWhereUniqueInput {
@@ -205,6 +212,7 @@ input TierWhereInput {
   name: StringFilter
   price: IntNullableFilter
   battlepass: BattlePassWhereInput
+  levels: LevelManyRelationFilter
 }
 
 input IntNullableFilter {
@@ -218,6 +226,12 @@ input IntNullableFilter {
   not: IntNullableFilter
 }
 
+input LevelManyRelationFilter {
+  every: LevelWhereInput
+  some: LevelWhereInput
+  none: LevelWhereInput
+}
+
 input TierOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -228,12 +242,20 @@ input TierUpdateInput {
   name: String
   price: Int
   battlepass: BattlePassRelateToOneForUpdateInput
+  levels: LevelRelateToManyForUpdateInput
 }
 
 input BattlePassRelateToOneForUpdateInput {
   create: BattlePassCreateInput
   connect: BattlePassWhereUniqueInput
   disconnect: Boolean
+}
+
+input LevelRelateToManyForUpdateInput {
+  disconnect: [LevelWhereUniqueInput!]
+  set: [LevelWhereUniqueInput!]
+  create: [LevelCreateInput!]
+  connect: [LevelWhereUniqueInput!]
 }
 
 input TierUpdateArgs {
@@ -245,6 +267,7 @@ input TierCreateInput {
   name: String
   price: Int
   battlepass: BattlePassRelateToOneForCreateInput
+  levels: LevelRelateToManyForCreateInput
 }
 
 input BattlePassRelateToOneForCreateInput {
@@ -252,10 +275,22 @@ input BattlePassRelateToOneForCreateInput {
   connect: BattlePassWhereUniqueInput
 }
 
+input LevelRelateToManyForCreateInput {
+  create: [LevelCreateInput!]
+  connect: [LevelWhereUniqueInput!]
+}
+
 type Level {
   id: ID!
   name: String
   tier: Tier
+  reward(
+    where: RewardWhereInput! = {}
+    orderBy: [RewardOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Reward!]
+  rewardCount(where: RewardWhereInput! = {}): Int
 }
 
 input LevelWhereUniqueInput {
@@ -269,6 +304,13 @@ input LevelWhereInput {
   id: IDFilter
   name: StringFilter
   tier: TierWhereInput
+  reward: RewardManyRelationFilter
+}
+
+input RewardManyRelationFilter {
+  every: RewardWhereInput
+  some: RewardWhereInput
+  none: RewardWhereInput
 }
 
 input LevelOrderByInput {
@@ -279,12 +321,20 @@ input LevelOrderByInput {
 input LevelUpdateInput {
   name: String
   tier: TierRelateToOneForUpdateInput
+  reward: RewardRelateToManyForUpdateInput
 }
 
 input TierRelateToOneForUpdateInput {
   create: TierCreateInput
   connect: TierWhereUniqueInput
   disconnect: Boolean
+}
+
+input RewardRelateToManyForUpdateInput {
+  disconnect: [RewardWhereUniqueInput!]
+  set: [RewardWhereUniqueInput!]
+  create: [RewardCreateInput!]
+  connect: [RewardWhereUniqueInput!]
 }
 
 input LevelUpdateArgs {
@@ -295,11 +345,82 @@ input LevelUpdateArgs {
 input LevelCreateInput {
   name: String
   tier: TierRelateToOneForCreateInput
+  reward: RewardRelateToManyForCreateInput
 }
 
 input TierRelateToOneForCreateInput {
   create: TierCreateInput
   connect: TierWhereUniqueInput
+}
+
+input RewardRelateToManyForCreateInput {
+  create: [RewardCreateInput!]
+  connect: [RewardWhereUniqueInput!]
+}
+
+type Reward {
+  id: ID!
+  name: String
+  description: String
+  type: String
+  rarity: String
+  level: Level
+}
+
+input RewardWhereUniqueInput {
+  id: ID
+}
+
+input RewardWhereInput {
+  AND: [RewardWhereInput!]
+  OR: [RewardWhereInput!]
+  NOT: [RewardWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  type: StringNullableFilter
+  rarity: StringNullableFilter
+  level: LevelWhereInput
+}
+
+input RewardOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  type: OrderDirection
+  rarity: OrderDirection
+}
+
+input RewardUpdateInput {
+  name: String
+  description: String
+  type: String
+  rarity: String
+  level: LevelRelateToOneForUpdateInput
+}
+
+input LevelRelateToOneForUpdateInput {
+  create: LevelCreateInput
+  connect: LevelWhereUniqueInput
+  disconnect: Boolean
+}
+
+input RewardUpdateArgs {
+  where: RewardWhereUniqueInput!
+  data: RewardUpdateInput!
+}
+
+input RewardCreateInput {
+  name: String
+  description: String
+  type: String
+  rarity: String
+  level: LevelRelateToOneForCreateInput
+}
+
+input LevelRelateToOneForCreateInput {
+  create: LevelCreateInput
+  connect: LevelWhereUniqueInput
 }
 
 """
@@ -332,6 +453,12 @@ type Mutation {
   updateLevels(data: [LevelUpdateArgs!]!): [Level]
   deleteLevel(where: LevelWhereUniqueInput!): Level
   deleteLevels(where: [LevelWhereUniqueInput!]!): [Level]
+  createReward(data: RewardCreateInput!): Reward
+  createRewards(data: [RewardCreateInput!]!): [Reward]
+  updateReward(where: RewardWhereUniqueInput!, data: RewardUpdateInput!): Reward
+  updateRewards(data: [RewardUpdateArgs!]!): [Reward]
+  deleteReward(where: RewardWhereUniqueInput!): Reward
+  deleteRewards(where: [RewardWhereUniqueInput!]!): [Reward]
 }
 
 type Query {
@@ -359,6 +486,14 @@ type Query {
   ): [Level!]
   level(where: LevelWhereUniqueInput!): Level
   levelsCount(where: LevelWhereInput! = {}): Int
+  rewards(
+    where: RewardWhereInput! = {}
+    orderBy: [RewardOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Reward!]
+  reward(where: RewardWhereUniqueInput!): Reward
+  rewardsCount(where: RewardWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

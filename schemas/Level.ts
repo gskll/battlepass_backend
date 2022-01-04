@@ -6,5 +6,6 @@ export const Level: Lists.Level = list({
   fields: {
     name: text({ validation: { isRequired: true } }),
     tier: relationship({ ref: 'Tier.levels', many: false }),
+    reward: relationship({ ref: 'Reward.level', many: true }),
   },
 })
