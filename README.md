@@ -1,52 +1,137 @@
-# Keystone Project Starter
+# Battle Pass Editor -- Backend
 
-Welcome to Keystone!
+**(See the frontend here)[https://github.com/gskll/battlepass_frontend]**
 
-Run
+## Get Started
 
-```
-yarn dev
-```
+1. Clone the repo
+2. `npm install`
+3. `npm run dev` -- the backend will be running on `localhost:3000` -- the frontend must be running at the same time
 
-To view the config for your new app, look at [./keystone.ts](./keystone.ts)
+## Tech stack
 
-This project starter is designed to give you a sense of the power Keystone can offer you, and show off some of its main features. It's also a pretty simple setup if you want to build out from it.
+- Frontend
 
-We recommend you use this alongside our [getting started walkthrough](https://keystonejs.com/docs/walkthroughs/getting-started-with-create-keystone-app) which will walk you through what you get as part of this starter.
+  - React
+  - NextJS
+  - Apollo Client
+  - Styled Components
 
-If you want an overview of all the features Keystone offers, check out our [features](https://keystonejs.com/why-keystone#features) page.
+- 'Backend'
+  - KeystoneJS (headless CMS)
+    - Node
+    - SQLite
 
-## Some Quick Notes On Getting Started
+## Features
 
-### Changing the database
+Battle pass editor utility
 
-We've set you up with an [SQLite database](https://keystonejs.com/docs/apis/config#sqlite) for ease-of-use. If you're wanting to use PostgreSQL, you can!
+- The app is a utility to edit a game's battle pass.
+- Each battle pass has different tiers, which offer different rewards once you complete daily or weekly missions.
+- Each tier has an associated price, along with different rewards as you progress along the levels.
+- Each level has an associated reward
+- Each battle pass also has associated missions to gain experience and progress through the levels
+- Each mission has a type/goal and an associated amount of experience on completion
 
-Just change the `db` property on line 16 of the Keystone file [./keystone.ts](./keystone.ts) to
+1. Users have general rules to set the experience needed for each level and the availability date range
+2. Ability to set daily and weekly missions to get experience for the Battle Pass. The missions can have different goals (collect resources, win combats, level up...)
+3. Users can edit the available tiers, with their names and prices.
+4. Users can configure each tier, to set rewards for each level (gold, food, creatures...)
+5. Users can save a Battle Pass draft to continue editing it later
+6. In case of an error, a description of the error will be shown
 
-```typescript
-db: {
-    provider: 'postgresql',
-    url: process.env.DATABASE_URL || 'DATABASE_URL_TO_REPLACE',
-}
-```
+## Improvements
 
-And provide your database url from PostgreSQL.
+- Client-side form validation
+- Drag and drop interface
+- Constraints on how similar/different tiers can be
+- Multi-user real time editing
 
-For more on database configuration, check out or [DB API Docs](https://keystonejs.com/docs/apis/config#db)
+## Frontend Page Structure
 
-### Auth
+- `/` & `/bp` Homepage
+  - shows all battle passes regardless of date and status
+  - create new battle pass button
+- `/bp/new` Create new battle pass page
+  - Form with new battle pass details
+  - Name, availability, experience between levels
+  - Tiers
+- `/bp/[bp_id]` Battle pass page
+  - show details for each pass
+    - name, status, availability
+    - experience between levels
+    - tiers
+    - missions
+    - overview of all rewards available in the battle pass
+  - create a new tier button
+- `/bp/[bp_id]/edit` Edit battle pass page
 
-We've put auth into its own file to make this humble starter easier to navigate. To explore it without auth turned on, comment out the `isAccessAllowed` on line 21 of the Keystone file [./keystone.ts](./keystone.ts).
+  - Allows editing of battle pass meta details and tier configuration
 
-For more on auth, check out our [Authentication API Docs](https://keystonejs.com/docs/apis/auth#authentication-api)
+- `/bp/[bp_id]/tier` Create new tier
+  - Form with new tier details
+- `/tier/[tier_id]` Tier page
+  - shows details for each tier associated with a battle pass
+  - name, price, number of levels
+  - shows each level with the associated reward
+  - overview of all rewards available in that tier
+  - create a new level button
+- `/tier/[tier_id]/edit` Edit tier page
 
-### Adding a frontend
+  - allows editing of the tier's details
 
-As a Headless CMS, Keystone can be used with any frontend that uses GraphQL. It provides a GraphQL endpoint you can write queries against at `/api/graphql` (by default [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql)). At Thinkmill, we tend to use [Next.js](https://nextjs.org/) and [Apollo GraphQL](https://www.apollographql.com/docs/react/get-started/) as our frontend and way to write queries, but if you have your own favourite, feel free to use it.
+- `/tier/[tier_id]/level` Create a new level
 
-A walkthrough on how to do this is forthcoming, but in the meantime our [todo example](https://github.com/keystonejs/keystone-react-todo-demo) shows a Keystone set up with a frontend. For a more full example, you can also look at an example app we built for [Prisma Day 2021](https://github.com/keystonejs/prisma-day-2021-workshop)
+  - Level number (1,2,3...)
+  - Reward
 
-### Embedding Keystone in a Next.js frontend
+- `/bp/[bp_id]/mission` Create a new mission
+- `/level/[level_id]` Edit level / reward
 
-While Keystone works as a standalone app, you can embed your Keystone app into a [Next.js](https://nextjs.org/) app. This is quite a different setup to the starter, and we recommend checking out our walkthrough for that [here](https://keystonejs.com/docs/walkthroughs/embedded-mode-with-sqlite-nextjs#how-to-embed-keystone-sq-lite-in-a-next-js-app).
+## Database Schema
+
+### Battlepass
+
+- Id
+- Name
+- Start_date
+- End_date
+- Experience
+- Tiers
+- Missions
+- Rewards
+
+### Tier
+
+- Id
+- Name
+- Price
+- Levels
+- Battlepass_id
+- Rewards
+
+### Level
+
+- Id
+- Name
+- Reward
+- Tier_id
+
+### Reward
+
+- Id
+- Name
+- Description
+- Type - Gold, Food, Creature, Weapon, Skin, Ability
+- Rarity - Common, Unusual, Rare, Legendary
+- Level_id
+
+### Mission
+
+- Id
+- Name
+- Description
+- Type - Daily, Weekly
+- Goal_type - Gametime, Victories, Collection, Levelup
+- Exp_awarded
+- Battlepass_id
