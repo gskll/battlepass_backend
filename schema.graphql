@@ -490,6 +490,7 @@ type Mission {
   description: String
   type: String
   goal_type: String
+  exp_awarded: Int
   battlepass: BattlePass
 }
 
@@ -506,6 +507,7 @@ input MissionWhereInput {
   description: StringFilter
   type: StringNullableFilter
   goal_type: StringNullableFilter
+  exp_awarded: IntNullableFilter
   battlepass: BattlePassWhereInput
 }
 
@@ -515,6 +517,7 @@ input MissionOrderByInput {
   description: OrderDirection
   type: OrderDirection
   goal_type: OrderDirection
+  exp_awarded: OrderDirection
 }
 
 input MissionUpdateInput {
@@ -522,6 +525,7 @@ input MissionUpdateInput {
   description: String
   type: String
   goal_type: String
+  exp_awarded: Int
   battlepass: BattlePassRelateToOneForUpdateInput
 }
 
@@ -535,6 +539,7 @@ input MissionCreateInput {
   description: String
   type: String
   goal_type: String
+  exp_awarded: Int
   battlepass: BattlePassRelateToOneForCreateInput
 }
 

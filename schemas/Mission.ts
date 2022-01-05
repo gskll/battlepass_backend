@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core'
 import { Lists } from '.keystone/types'
-import { relationship, select, text } from '@keystone-6/core/fields'
+import { integer, relationship, select, text } from '@keystone-6/core/fields'
 
 export const Mission: Lists.Mission = list({
   fields: {
@@ -30,6 +30,7 @@ export const Mission: Lists.Mission = list({
         displayMode: 'segmented-control',
       },
     }),
+    exp_awarded: integer(),
     battlepass: relationship({ ref: 'BattlePass.missions', many: false }),
   },
 })

@@ -69,6 +69,7 @@ model Mission {
   description  String      @default("")
   type         String?
   goal_type    String?
+  exp_awarded  Int?
   battlepass   BattlePass? @relation("Mission_battlepass", fields: [battlepassId], references: [id])
   battlepassId String?     @map("battlepass")
 
